@@ -103,22 +103,6 @@ class Mapping:
             for tpl in lst:
                 self.__validate_tuple(tpl)
 
-    def __convert(self, to: str, val):
-
-        def to_bool(x):
-            try:
-                return int(x) != 0
-            except ValueError:
-                return False
-
-        self.__validate_type(to)
-        return {
-            'int': lambda x: int(x),
-            'float': lambda x: float(x),
-            'str': lambda x: str(x),
-            'bool': lambda x: to_bool(x)
-        }[to](val)
-
     def __extract_fields(self, schema: dict):
         fields = []
         for k, v in zip(schema.keys(),
@@ -157,25 +141,45 @@ class Mapping:
         return self.__create_structure(self.__schema, row)
 
     def __create_structure(self, schema: dict,  row: dict):
+
+        def convert(val, to: str,):
+            def to_bool(x):
+                try:
+                    return int(x) != 0
+                except ValueError:
+                    return False
+            self.__validate_type(to)
+            return {
+                'int': lambda x: int(x),
+                'float': lambda x: float(x),
+                'str': lambda x: str(x),
+                'bool': lambda x: to_bool(x)
+            }[to](val)
+
+        def cell_data(header: tuple):
+            column = header[0]
+            type = header[1]
+            return convert(row[column], type)
+        
         struct = dict()
         for k, v in zip(schema.keys(),
                         schema.values()):
-
-            if isinstance(k, str) and isinstance(v, str):
-                struct[k] = self.__convert(v, row[k])
-
-            if isinstance(k, str) and isinstance(v, dict):
+            if isinstance(v, str):
+                struct[k] = cell_data((k, v))
+                continue
+            if isinstance(v, dict):
                 struct[k] = self.__create_structure(v, row)
-
+                continue
             if isinstance(k, tuple) and isinstance(v, tuple):
-                left = self.__convert(k[1], row[k[0]])
-                right = self.__convert(v[1], row[v[0]])
-                struct[left] = right
-
-            if isinstance(k, str) and isinstance(v, list):
+                key = cell_data(k)
+                data = cell_data(v)
+                struct[key] = data
+                continue
+            if isinstance(v, list):
                 if len(v) == 1 and isinstance(v[0], str):
-                    struct[k] = [self.__convert(v[0], x) for x in str(row[k]).split(',')]
-                elif all([(isinstance(x, tuple) and len(x) == 2) for x in v]):
-                    struct[k] = [self.__convert(x[1], row[x[0]]) for x in v]
-
+                    struct[k] = [convert(x, v[0])
+                                 for x in str(row[k]).split(',')]
+                struct[k] = [cell_data(x) for x in v]
         return struct
+
+

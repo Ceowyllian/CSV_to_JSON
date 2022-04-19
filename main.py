@@ -101,7 +101,7 @@ csvpath = fr'C:\myfiles\{csvname}'
 jsonpath = fr'C:\myfiles\json\{jsonname}'
 
 # Преобразовать таблицу в список JSON-объектов
-# parser.csv_to_json(csvpath, jsonpath, schema)
+parser.csv_to_json(csvpath, jsonpath, schema)
 
 # Создать таблицу с нужным заголовком для для схемы
 # parser.create_table(csvpath, schema)
