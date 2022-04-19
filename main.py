@@ -75,6 +75,65 @@ film = {
     'price': 'float'
 }
 
+book = {
+    'title': 'str',
+    'amount': 'int',
+    'price': 'float',
+    'authors': ['str'],
+    'ISBN': 'str',
+    'publisher': 'str',
+    'year': 'int'
+}
+
+deposit = {
+    'id': 'int',
+    'balance': 'float',  # так делать нельзя, но ладно
+    'currency': 'str',
+    'term': 'int',
+    'interest rate': 'int'
+}
+
+tariff = {
+    'name': 'str',
+    'monthly cost': 'float',
+    'traffic (Gb)': 'float',
+    'minutes': 'int'
+}
+
+fitness = {
+    'type': 'str',
+    'cost': 'float',
+    'number of visits': 'int',
+    'starts': 'str',
+    'ends': 'str'
+}
+
+apartment = {
+    'address': 'str',
+    'number of rooms': 'int',
+    'area (sq. m)': 'float',
+    'floor': 'int',
+    'price': 'float',
+    'balcony': 'bool',
+    'lift': 'bool'
+}
+
+smartphone = {
+    'model': 'str',
+    'cost': 'float',
+    'amount': 'int',
+    'manufacturer': 'str',
+    'memory size (Gb)': 'float',
+    'diagonal (inch)': 'float',
+    'camera (mpx)': 'float'
+}
+
+ticket = {
+    'name': 'str',
+    'type': 'str',
+    'cost': 'float',
+    'term (mon)': 'int'
+}
 
 # Здесь можно указать названия и расположение файлов, а также выбрать схему
 jsonname = 'test.json'
@@ -83,6 +142,8 @@ schema = specialty
 
 csvpath = fr'C:\myfiles\{csvname}'
 jsonpath = fr'C:\myfiles\json\{jsonname}'
+
+print(bool(-1))
 
 # Преобразовать таблицу в список JSON-объектов
 # parser.csv_to_json(csvpath, jsonpath, schema)
