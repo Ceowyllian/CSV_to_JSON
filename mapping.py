@@ -23,7 +23,7 @@ class Mapping:
     def __validate_type(s: str):
         if not isinstance(s, str):
             raise TypeError('Название типа должно быть строкой')
-        if s not in ('int', 'float', 'str'):
+        if s not in ('int', 'float', 'str', 'bool'):
             raise ValueError('Недопустимое название типа')
 
     @staticmethod
@@ -111,6 +111,7 @@ class Mapping:
                 'int': lambda x: int(x),
                 'float': lambda x: float(str(x).replace(',', '.')),
                 'str': lambda x: str(x),
+                'bool': lambda x: bool(x)
                 }[to](val)
 
     def __create_structure(self, schema: dict,  row: dict):
